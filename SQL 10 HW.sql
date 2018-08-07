@@ -81,7 +81,11 @@ ORDER BY last_name ASC;
 -- 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. 
 -- As an unintended consequence, films starting with the letters K and Q have also soared in popularity. 
 -- Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
-
+Use sakila;
+SELECT title
+FROM film
+WHERE (title LIKE 'K%' OR title LIKE 'Q%') 
+AND language_id=(SELECT language_id FROM language where name='English');
 
 -- 7b. Use subqueries to display all actors who appear in the film Alone Trip.
 SELECT last_name, first_name 
