@@ -81,7 +81,7 @@ ORDER BY last_name ASC;
 -- 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. 
 -- As an unintended consequence, films starting with the letters K and Q have also soared in popularity. 
 -- Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
-Use sakila;
+
 SELECT title
 FROM film
 WHERE (title LIKE 'K%' OR title LIKE 'Q%') 
@@ -108,15 +108,22 @@ SELECT title FROM film WHERE film_id
 IN (SELECT film_id FROM film_category 
 WHERE category_id IN (SELECT category_id FROM category WHERE name = 'Family'));
 
-use sakila;
--- 7e. Display the most frequently rented movies in descending order.
-select title, count(f.film_id) AS 'Rented Movies' 
-FROM film f
-join inventory i on (f.film_id =i.film_id)
-join rental r on (i.inventory_id = r.inventory_id)
-GROUP BY title ORDER BY 'Rented Movies' DESC;
 
-use sakila;
+-- 7e. Display the most frequently rented movies in descending order.
+SELECT 
+    a.title, 
+    a.film_id, 
+    count(distinct c.rental_id) as frequency_Count
+FROM
+    sakila.film a,
+    sakila.inventory b,
+    sakila.rental c
+WHERE
+    a.film_id = b.film_id
+    and b.inventory_id = c.inventory_id
+    group by 1,2
+    order by frequency_Count desc;
+
 -- 7f. Write a query to display how much business, in dollars, each store brought in.
 SELECT store.store_id, SUM(amount) AS revenue FROM store 
 INNER JOIN staff ON store.store_id = staff.store_id 
